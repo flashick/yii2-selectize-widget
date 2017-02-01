@@ -10,6 +10,7 @@ namespace dosamigos\selectize;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use yii\helpers\Html;
 
 /**
  * InputWidget
@@ -48,8 +49,12 @@ class InputWidget extends \yii\widgets\InputWidget
         }
 
         $options = Json::encode($this->clientOptions);
-        $view = $this->getView();
-        SelectizeAsset::register($view);
-        $view->registerJs("jQuery('#$id').selectize($options);");
+        if (isset($this->options['printInBody']) && $this->options['printInBody'] == true){
+            echo Html::script("jQuery(document).ready(function () { jQuery('#$id').selectize($options); });");
+        }else{
+            $view = $this->getView();
+            SelectizeAsset::register($view);
+            $view->registerJs("jQuery('#$id').selectize($options);");
+        }
     }
 }
